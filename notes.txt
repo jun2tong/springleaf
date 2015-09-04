@@ -10,4 +10,5 @@ Thoughts on next steps:
 -> Can also try fitting GLM and see how it works, doubt it will work since it's not regression
 -> Projection, projection to lower dimension will speed up the calculation.
 -> Down side, might have to estimate the probabilities instead of computing the explicit decision boundary
+-> Maybe replace NA's in categorical variables into a single class and integer variable into 0? Maybe, just maybe.
 -> Ask Sharcnet if I can use the server
