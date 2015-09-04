@@ -1,9 +1,11 @@
 Summary of the data set:
 -> All rows contains NA entries in some predictors
--> Not all column contains NA entries. There are 1455 of them (Without NA's) in total. Should train on these predictors instead
+-> Not all column contains NA entries. There are 1455 of them (Without NA's) in total.
+   Should train on these predictors instead
 -> Some of these predictors looks redundant, some looks like date or something sort of
 -> Modified remove.na to remove columns instead of rows in source.R
--> The categorical variables may be taking too much space, should change that into numeric categories, i.e. levels: 1 2 3 instead of factors: "alpha" "charlie" "bravo" (some example)
+-> The categorical variables may be taking too much space, should change that into
+   numeric categories, i.e. levels: 1 2 3 instead of factors: "alpha" "charlie" "bravo" (some example)
 
 Thoughts on next steps:
 -> Either fit SVM to interpolate then fit a tree model or vice versa
