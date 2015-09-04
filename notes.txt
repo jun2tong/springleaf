@@ -1,0 +1,12 @@
+Summary of the data set:
+-> All rows contains NA entries in some predictors
+-> Not all column contains NA entries. There are 1455 of them in total. Should train on these predictors instead
+-> Some of these predictors looks redundant, some looks like date or something sort of
+-> Modified remove.na to remove columns instead of rows in source.R
+
+Thoughts on next steps:
+-> Either fit SVM to interpolate then fit a tree model or vice versa
+-> Can also try fitting GLM and see how it works, doubt it will work since it's not regression
+-> Projection, projection to lower dimension will speed up the calculation.
+-> Down side, might have to estimate the probabilities instead of computing the explicit decision boundary
+-> Ask Sharcnet if I can use the server
