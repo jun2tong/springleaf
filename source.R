@@ -274,13 +274,15 @@ clean <- function(x){
     x.extra <- matrix(0,nrow = nobs, ncol = 0)
    for(i in 1:np){
         col <- x[,i]
-        if(is.factor(col)){
-            temp <- factorise(col)
-            x.new <- cbind(x.new,temp)
-        } else if(is.integer(col)){
-            temp <- integerise(col)
-            x.new <- cbind(x.new,temp$updated)
-            x.extra <- cbind(x.extra,temp$posn)
+        if (sum(is.na(col))>0){
+          if(is.factor(col)){
+              temp <- factorise(col)
+              x.new <- cbind(x.new,temp)
+          } else if(is.integer(col)){
+              temp <- integerise(col)
+              x.new <- cbind(x.new,temp$updated)
+              x.extra <- cbind(x.extra,temp$posn)
+          }
         }
     }
     out <- cbind(x.new,x.extra)
