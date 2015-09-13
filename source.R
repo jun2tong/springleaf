@@ -246,14 +246,15 @@ refit <- function(x.train,y.train,x.test,y.test,k,betas){
 # Function to change the levels of categories from characters
 # into integers
 factorise <- function(u){
-    u <- as.character(u)
-    class <- unique(u)
-    len <- length(class)
-    for(i in 1:len){
-     u[which(u == class[i])] <- i
-    }
-    u <- as.factor(u)
-    return(u)
+  u <- as.character(u)
+  class <- sort(unique(u))
+  len <- length(class)
+  for(i in 1:len){
+    u[which(u == class[i])] <- i
+  }  
+  u[is.na(u)] <- "0"
+  u <- as.factor(u)
+  return(u)
 }
 
 # Function to replace NA values in integer columns
