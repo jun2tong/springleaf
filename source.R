@@ -285,6 +285,8 @@ clean <- function(x){
               x.extra <- cbind(x.extra,temp$posn)
           }
         }
+    } else {
+        x.raw <- cbind(x.raw,col)
     }
     out <- cbind(x.new,x.extra)
     return(out)
