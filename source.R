@@ -281,13 +281,11 @@ clean <- function(x){
               x.new <- cbind(x.new,temp)
           } else if(is.integer(col)){
               temp <- integerise(col)
-              x.new <- cbind(x.new,temp$updated)
-              x.extra <- cbind(x.extra,temp$posn)
+              x.new <- cbind(x.new,temp$updated,temp$posn)
           }
         } else {
             x.new <- cbind(x.new,col)
         }
     }
-    out <- cbind(x.new,x.extra)
     return(out)
 }
