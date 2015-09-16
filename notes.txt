@@ -1,16 +1,13 @@
-Summary of the data set:
--> All rows contains NA entries in some predictors
--> Not all column contains NA entries. There are 1455 of them (Without NA's) in total.
-   Should train on these predictors instead
--> Some of these predictors looks redundant, some looks like date or something sort of
--> Modified remove.na to remove columns instead of rows in source.R
--> The categorical variables may be taking too much space, should change that into
-   numeric categories, i.e. levels: 1 2 3 instead of factors: "alpha" "charlie" "bravo" (some example)
+Summary of clean.data:
+-> Dimension is 145231 x 2383
+-> Still several columns containing only 0's
+-> First column is still the index/ id of the row
+-> Last column is still the class
+-> Last column is changed to numeric
 
-Thoughts on next steps:
--> Either fit SVM to interpolate then fit a tree model or vice versa
--> Can also try fitting GLM and see how it works, doubt it will work since it's not regression
--> Projection, projection to lower dimension will speed up the calculation.
--> Down side, might have to estimate the probabilities instead of computing the explicit decision boundary
--> Maybe replace NA's in categorical variables into a single class and integer variable into 0? Maybe, just maybe.
--> Ask Sharcnet if I can use the server
+To-do List:
+-> Change last column into categorical (i.e. factor in R)
+-> Change the category of last column into {+1,-1} instead of {0,1}
+-> Remove column names, annoying
+-> Remove columns with only 0's
+-> Partition data set into 6 sets, need to be tracked with its id
