@@ -7,7 +7,7 @@ Summary of clean.data:
 
 To-do List:
 -> Change last column into categorical (i.e. factor in R)
--> Change the category of last column into {+1,-1} instead of {0,1}
+-> (DONE) Change the category of last column into {+1,-1} instead of {0,1}
 -> Remove column names, annoying
--> Remove columns with only 0's
+-> (DONE) Remove columns with only 0's
 -> Partition data set into 6 sets, need to be tracked with its id
