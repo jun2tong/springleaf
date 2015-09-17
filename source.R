@@ -279,7 +279,9 @@ clean <- function(x){
           if(is.factor(col)){
               temp <- factorise(col)
               x.new <- cbind(x.new,temp)
-          } else if(is.integer(col)){
+          }
+          #} else if(is.integer(col)){# dont think we need this check
+            else {
               temp <- integerise(col)
               x.new <- cbind(x.new,temp$updated,temp$posn)
           }
@@ -292,23 +294,25 @@ clean <- function(x){
 
 
 #function that mutate a vector of 0 and 1 to -1 and 1
-#currently I'm not sure if I want to do this as a function or in the script
+#decided to do it the way it is written now. Its more consistent with the code base.
+#need to do something like
+#cleaned[,ncol(cleaned)] <- mutateResponse(cleaned[,ncol(cleaned)])
 mutateResponse <- function(avec){
   avec <- 2*avec - 1
+  return(avec)
 }
 
-#remove columns of all zeroes
-#same not sure if we want to mutate our matrix or return a new matrix
-#mutate will save memory, return will make repeatedly running functions easy
+#Finalized function to remove columns of all zeroes
 removeZeroes <- function(bigmac,nrow,ncol){
   i <- 1
   temp <- matrix(0,nrow=nrow,ncol=ncol)
   for(n in 1:ncol){
-    if (all(bigmac[,n] = 0)){
+    if (all(bigmac[,n] != 0)){
       temp[,i] = bigmac[,n]
       i = i + 1
     }
   }
+  temp <- temp[,1:(i-1)]
   return(temp)
 }
 
