@@ -289,3 +289,34 @@ clean <- function(x){
     }
     return(out)
 }
+
+
+#function that mutate a vector of 0 and 1 to -1 and 1
+#currently I'm not sure if I want to do this as a function or in the script
+mutateResponse <- function(avec){
+  avec <- 2*avec - 1
+}
+
+#remove columns of all zeroes
+#same not sure if we want to mutate our matrix or return a new matrix
+#mutate will save memory, return will make repeatedly running functions easy
+removeZeroes <- function(bigmac,nrow,ncol){
+  i <- 1
+  temp <- matrix(0,nrow=nrow,ncol=ncol)
+  for(n in 1:ncol){
+    if (all(bigmac[,n] = 0)){
+      temp[,i] = bigmac[,n]
+      i = i + 1
+    }
+  }
+  return(temp)
+}
+
+
+
+
+
+
+
+
+
