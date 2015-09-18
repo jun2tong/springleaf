@@ -8,14 +8,17 @@ source('source.R')
 ######################################################
 # Raw Data
 ######################################################
-raw <- read.csv('train.csv',header = TRUE)
+raw <- load('raw_data.rdata')
 
 ######################################################
 # Cleaning & Interpolation
 ######################################################
-data.clean <- remove.na(raw) # Raw data without rows with NA entries
-x.clean <- as.matrix(data.clean[,2:(ncol(data.clean)-1)],dimnames = list(rownames = data.clean[,1],colnames = names(raw)))
-y.clean <- data.clean[,ncol(data.clean)]
+clean_data1 <- clean(raw)
+clean_data1[,ncol(clean_data1)] <- mutateResponse(clean_data1[,ncol(clean_data1)])
+clean_data <- removeZeroes(clean_data1,nrow(clean_data1),ncol(clean_data1))
+save(clean_data, file = 'clean_data.rdata')
 
-print(dim(x.clean))
-print(length(y.clean))
+######################################################
+# Partition of data
+######################################################
+
