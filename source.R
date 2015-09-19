@@ -273,7 +273,6 @@ clean <- function(x){
     nobs <- nrow(x)
     np <- ncol(x)
     x.new <- matrix(0,nrow = nobs,ncol = 0)
-    x.extra <- matrix(0,nrow = nobs, ncol = 0)
     for(i in 1:np){
         col <- x[,i]
         if (sum(is.na(col))>0){
