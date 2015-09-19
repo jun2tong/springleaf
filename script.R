@@ -22,3 +22,7 @@ save(clean_data, file = 'clean_data.rdata')
 # Partition of data
 ######################################################
 
+groups <- group2six(clean_data)
+one <- groups$one
+one <- groups$one
+one <- groups$one
