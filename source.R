@@ -270,21 +270,20 @@ integerise <- function(u){
 
 # Function that takes in a matrix and replace the NA values
 clean <- function(x){
-    nobs <- nrow(x); np <- ncol(x);
+    nobs <- nrow(x)
+    np <- ncol(x)
     x.new <- matrix(0,nrow = nobs,ncol = 0)
     x.extra <- matrix(0,nrow = nobs, ncol = 0)
-   for(i in 1:np){
+    for(i in 1:np){
         col <- x[,i]
         if (sum(is.na(col))>0){
-          if(is.factor(col)){
-              temp <- factorise(col)
-              x.new <- cbind(x.new,temp)
-          }
-          #} else if(is.integer(col)){# dont think we need this check
-            else {
-              temp <- integerise(col)
-              x.new <- cbind(x.new,temp$updated,temp$posn)
-          }
+            if(is.factor(col)){
+                temp <- factorise(col)
+                x.new <- cbind(x.new,temp)
+            } else {
+                temp <- integerise(col)
+                x.new <- cbind(x.new,temp$updated,temp$posn)
+            }
         } else {
             x.new <- cbind(x.new,col)
         }
