@@ -314,7 +314,92 @@ removeZeroes <- function(bigmac,nrow,ncol){
   return(temp)
 }
 
-
+#this function assumes the last column is the responce
+group2six <- function(bigmac,shuffle=FALSE){
+  m <- nrow(bigmac)
+  n <- ncol(bigmac)
+  allone <- bigmac[bigmac[,n]==1,]
+  allzero <- bigmac[bigmac[,n]==0,]
+  oneobs <- nrow(allone)
+  zeroobs <- nrow(allzero)
+  if((oneobs+zeroobs) != m){
+    return false
+  }
+  
+  one <- matrix(0,nrow=0,ncol=n)
+  two <- matrix(0,nrow=0,ncol=n)
+  three <- matrix(0,nrow=0,ncol=n)
+  four <- matrix(0,nrow=0,ncol=n)
+  five <- matrix(0,nrow=0,ncol=n)
+  six <- matrix(0,nrow=0,ncol=n)
+  count <- 1
+  
+  if (shuffle){
+    bigmac <- bigmac[sample(m),]
+  }
+  
+  for(i in 1:oneobs){
+    if (count == 1){
+      one <- rbind(one,allone[i,])
+      count <- count + 1
+    }
+    else if (count == 2){
+      two <- rbind(two,allone[i,])
+      count <- count + 1
+    }
+    else if (count == 3){
+      three <- rbind(three,allone[i,])
+      count <- count + 1
+    }
+    else if (count == 4){
+      four <- rbind(four,allone[i,])
+      count <- count + 1
+    }
+    else if (count == 5){
+      five <- rbind(five,allone[i,])
+      count <- count + 1
+    }
+    else if (count == 6){
+      six <- rbind(six,allone[i,])
+      count <- 1
+    }
+  }
+  for(i in 1:zeroobs){
+    if (count == 1){
+      one <- rbind(one,allzero[i,])
+      count <- count + 1
+    }
+    else if (count == 2){
+      two <- rbind(two,allzero[i,])
+      count <- count + 1
+    }
+    else if (count == 3){
+      three <- rbind(three,allzero[i,])
+      count <- count + 1
+    }
+    else if (count == 4){
+      four <- rbind(four,allzero[i,])
+      count <- count + 1
+    }
+    else if (count == 5){
+      five <- rbind(five,allzero[i,])
+      count <- count + 1
+    }
+    else if (count == 6){
+      six <- rbind(six,allone[i,])
+      count <- 1
+    }
+  }
+  one <- one[sample(nrow(one)),]
+  two <- two[sample(nrow(two)),]
+  three <- three[sample(nrow(three)),]
+  four <- four[sample(nrow(four)),]
+  five <- five[sample(nrow(five)),]
+  six <- six[sample(nrow(six)),]
+  allmatrix <- list(one,two,three,four,five,six)
+  names(allmatrix) <- c("one","two","three","four","five","six")
+  return(allmatrix)
+}
 
 
 
