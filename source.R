@@ -287,6 +287,9 @@ clean <- function(x){
             x.new <- cbind(x.new,col)
         }
     }
+    colnames(x.new) <- NULL
+    out <- x.new[,2:ncol(x.new)]
+    rownames(out) <- x.new[,1]
     return(out)
 }
 
