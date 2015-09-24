@@ -9,6 +9,7 @@ source('source.R')
 # Raw Data
 ######################################################
 load('raw_data.rdata')
+k <- 2
 
 ######################################################
 # Cleaning & Interpolation
@@ -47,82 +48,64 @@ x6 <- six[,-np]
 ####################################################
 # Calculating CRE  
 ####################################################
-  errors <- rep.int(x=0,times = 4)
+  betas.global <- rep(0,((k-1)*(p+1)))
   indices <- 1:6
   lambda.global <- 0
   for(i in 1:6){
     # Test set
-    y.test <- get(paste('y',i,sep=''));
-    x.test <- as.matrix(get(paste('x',i,sep='')));
+    y_test <- get(paste('y',i,sep=''));
+    x_test <- as.matrix(get(paste('x',i,sep='')));
       
-    train.errors <- rep.int(x = 0, times = 41);
+    train_errors <- rep.int(x = 0, times = 41);
     
     for(j in setdiff(1:6,i)){
       # Tuning Set
-      y.tune <- get(paste('y',j,sep=''));
-      x.tune <- as.matrix(get(paste('x',j,sep='')));
+      y_tune <- get(paste('y',j,sep=''));
+      x_tune <- as.matrix(get(paste('x',j,sep='')));
       
       rest <- setdiff(1:6,c(i,j));
       
-      y.train <- unlist(mget(paste('y',rest,sep='')));
-      x.train <- as.matrix(do.call(rbind,lapply(paste('x',rest,sep=''),get)));
+      y_train <- unlist(mget(paste('y',rest,sep='')));
+      x_train <- as.matrix(do.call(rbind,lapply(paste('x',rest,sep=''),get)));
       
-      p.prime <- ncol(x.train); n.prime <- nrow(x.train);
+      p_prime <- ncol(x_train); n_prime <- nrow(x_train);
       
       for(ii in -20:20){
-        lambda.temp <- 2^(ii)
-        t.temp <- optim(par = rep(0,((k-1)*(p.prime+1))),fn = fr,gr = grr,x = x.train, y = y.train, p=p.prime, n=n.prime, k = k, lambda=lambda.temp, method="BFGS") $par;
+        lambda_temp <- 2^(ii)
+        t_temp <- optim(par = rep(0,((k-1)*(p.prime+1))),fn = fr,gr = grr,x = x_train, y = y_train, p=p_prime, n=n_prime, k = k, lambda=lambda_temp, method="BFGS") $par;
         
-        fhat.temp <- pred.vertex(x = x.tune, t = t.temp, k = k);
+        fhat_temp <- pred.vertex(x = x_tune, t = t_temp, k = k);
         
-        error.temp <- length(which(fhat.temp != y.tune))/length(y.tune);
+        error_temp <- length(which(fhat_temp != y_tune))/length(y_tune);
         
-        train.errors[ii] <- train.errors[ii] + error.temp;
+        train_errors[ii] <- train_errors[ii] + error_temp;
       }
       
     }
     
     lambdas <- 2^(-20:20);
     
-    lambda.min <- min(train.errors);
+    lambda_min <- min(train_errors);
     
-    lambdahat <- lambdas[as.numeric(max(which(train.errors == lambda.min)))];
+    lambdahat <- lambdas[as.numeric(max(which(train_errors == lambda_min)))];
     
-    cv.index <- setdiff(indices,i);
+    cv_index <- setdiff(indices,i);
     
-    y.cv <- unlist(mget(paste('y',cv.index,sep='')));
-    x.cv <- as.matrix(do.call(rbind,lapply(paste('x',cv.index,sep=''),get)));
+    y_cv <- unlist(mget(paste('y',cv_index,sep='')));
+    x_cv <- as.matrix(do.call(rbind,lapply(paste('x',cv_index,sep=''),get)));
     
-    n <- nrow(x.cv); p <- ncol(x.cv);
+    n <- nrow(x_cv); p <- ncol(x_cv);
     
-    betas <- optim(par = rep(0,((k-1)*(p+1))),fn = fr,gr = grr,x = x.cv, y = y.cv, p=p, n=n, k = k, lambda=lambdahat, method="BFGS") $par;
+    betas <- optim(par = rep(0,((k-1)*(p+1))),fn = fr,gr = grr,x = x_cv, y = y_cv, p=p, n=n, k = k, lambda=lambdahat, method="BFGS") $par;
     
     ###########################################################
     # Finding Betas and refitting step
-    fhat <- pred.vertex(x=x.test,t = betas, k = k)
-    fhat.prob <- prob.vertex(x = x.test, t = betas, k = k)
+    fhat <- pred.vertex(x=x_test,t = betas, k = k)
+    fhat.prob <- prob.vertex(x = x_test, t = betas, k = k)
     
-    fit <- refit(x.train = x.cv, y.train = y.cv, x.test = x.test, y.test = y.test, k = k, betas = betas)
+    fit <- refit(x.train = x_cv, y.train = y_cv, x.test = x_test, y.test = y_test, k = k, betas = betas)
     
     refit.prob <- fit$class.probability
-    
-    list.fit <- list.refit <- numeric(0)
-    for(ii in 1:length(y.test)){
-      list.fit <- c(list.fit, fhat.prob[ii,y.test[ii]])
-      list.refit <- c(list.refit, refit.prob[ii,y.test[ii]])
-    }
-    
-    err.temp <- c(- sum(log(list.fit))/length(y.test),- sum(log(list.refit))/length(y.test))
-    
-    errors <- errors + c(length(which(fhat!= y.test))/(6*length(y.test)),fit$error/6,err.temp)
-    
-    print(Sys.time())
-    print(errors)
   }
-  
-  ave.err <- ave.err + errors
-  print(ave.err)
-}
-ave.err <- ave.err/100
 
 
