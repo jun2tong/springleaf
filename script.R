@@ -49,9 +49,9 @@ x6 <- six[,-np]
 # Calculating CRE  
 ####################################################
   indices <- 1:6
-  lambda.global <- 0
-  betas.global <- rep(0,((k-1)*(p+1)))
-  etas.global <- rep(0,((k-1)*(k-1)))
+lambda_global <- 0
+betas_global <- rep(0,((k-1)*(p+1)))
+etas_global <- rep(0,((k-1)*(k-1)))
   for(i in 1:6){
     # Test set
     y_test <- get(paste('y',i,sep=''));
@@ -98,7 +98,7 @@ x6 <- six[,-np]
     n <- nrow(x_cv); p <- ncol(x_cv);
     
     betas <- optim(par = rep(0,((k-1)*(p+1))),fn = fr,gr = grr,x = x_cv, y = y_cv, p=p, n=n, k = k, lambda=lambdahat, method="BFGS") $par;
-    
+    betas_global <- betas_global + betas
     ###########################################################
     # Finding Betas and refitting step
     fhat <- pred.vertex(x=x_test,t = betas, k = k)
@@ -106,8 +106,9 @@ x6 <- six[,-np]
     
     fit <- refit(x.train = x_cv, y.train = y_cv, x.test = x_test, y.test = y_test, k = k, betas = betas)
     etas <- fit$etas
-    
+    etas_global<- etas_global + etas
     refit.prob <- fit$class.probability
   }
 
-
+betas_global <- betas_global/6
+etas_global <- etas_global/6
