@@ -308,7 +308,7 @@ removeZeroes <- function(bigmac,nrow,ncol){
   i <- 1
   temp <- matrix(0,nrow=nrow,ncol=ncol)
   for(n in 1:ncol){
-    if (all(bigmac[,n] != 0)){
+    if (sum(bigmac[,n] == 0)==nrow){
       temp[,i] = bigmac[,n]
       i = i + 1
     }
