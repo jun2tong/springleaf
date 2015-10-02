@@ -1,13 +1,7 @@
-Summary of clean.data:
--> Dimension is 145231 x 2383
--> Still several columns containing only 0's
--> First column is still the index/ id of the row
--> Last column is still the class
--> Last column is changed to numeric
-
 To-do List:
--> Change last column into categorical (i.e. factor in R)
--> (DONE) Change the category of last column into {+1,-1} instead of {0,1}
--> Remove column names, annoying
--> (DONE) Remove columns with only 0's
--> Partition data set into 6 sets, need to be tracked with its id
+- clean() function has to be modified so that it keeps track of the columns. One way to do this is to assign v1,...,v1934 for each column, and ci as the new column appended to the matrix when i is integer column with NA's
+- clean both test and train data and only do analysis on the columns that appeared both in clean_test and clean_train
+- Build model and calculate the probability manually (Half done: Can't if model works since dimension does not match up, need to calculate probability)
+
+Update:
+- ???
