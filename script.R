@@ -93,6 +93,19 @@ x6 <- six[,-np]
     
     for(j in setdiff(1:6,i)){
       # Tuning Set
+        indices <- 1:6
+lambda_global <- 0
+betas_global <- rep(0,((k-1)*(p+1)))
+etas_global <- rep(0,((k-1)*(k-1)))
+  for(i in 1:6){
+    # Test set
+    y_test <- get(paste('y',i,sep=''));
+    x_test <- as.matrix(get(paste('x',i,sep='')));
+      
+    train_errors <- rep.int(x = 0, times = 41);
+    
+    for(j in setdiff(1:6,i)){
+      # Tuning Set
       y_tune <- get(paste('y',j,sep=''));
       x_tune <- as.matrix(get(paste('x',j,sep='')));
       
@@ -130,7 +143,7 @@ x6 <- six[,-np]
     n <- nrow(x_cv); p <- ncol(x_cv);
     
     betas <- optim(par = rep(0,((k-1)*(p+1))),fn = fr,gr = grr,x = x_cv, y = y_cv, p=p, n=n, k = k, lambda=lambdahat, method="BFGS") $par;
-    
+    betas_global <- betas_global + betas
     ###########################################################
     # Finding Betas and refitting step
     fhat <- pred.vertex(x=x_test,t = betas, k = k)
@@ -138,9 +151,24 @@ x6 <- six[,-np]
     
     fit <- refit(x.train = x_cv, y.train = y_cv, x.test = x_test, y.test = y_test, k = k, betas = betas)
     etas <- fit$etas
-    
+    etas_global<- etas_global + etas
     refit.prob <- fit$class.probability
   }
 
+betas_global <- betas_global/6
+etas_global <- etas_global/6
 
->>>>>>> parent of e5ff0b8... updated the betas and etas global
+##########################################################################################
+# Building model with test set
+#####################################################################################
+# Define appropriate beta and eta for test
+beta_matrix <- matrix(betas_global,nrow = np+1, ncol = k-1)
+beta_test <- beta_matrix[1:np,]
+beta0_test <- beta_matrix[np+1,]
+
+eta_matrix <- matrix(etas_global, nrow = k+1, ncol = k-1)
+eta_test <- eta_matrix[1:k,]
+eta0_test <- eta_matrox[k+1,]
+
+# Building the model
+model <- t(t(t(t(x %*% beta_test) + beta0_test) %*% eta_test) + eta0_test)
