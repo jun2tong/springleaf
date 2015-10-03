@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Script for Kaggle springleaf
 
 ######################################################
@@ -93,19 +92,6 @@ x6 <- six[,-np]
     
     for(j in setdiff(1:6,i)){
       # Tuning Set
-        indices <- 1:6
-lambda_global <- 0
-betas_global <- rep(0,((k-1)*(p+1)))
-etas_global <- rep(0,((k-1)*(k-1)))
-  for(i in 1:6){
-    # Test set
-    y_test <- get(paste('y',i,sep=''));
-    x_test <- as.matrix(get(paste('x',i,sep='')));
-      
-    train_errors <- rep.int(x = 0, times = 41);
-    
-    for(j in setdiff(1:6,i)){
-      # Tuning Set
       y_tune <- get(paste('y',j,sep=''));
       x_tune <- as.matrix(get(paste('x',j,sep='')));
       
@@ -166,9 +152,11 @@ beta_matrix <- matrix(betas_global,nrow = np+1, ncol = k-1)
 beta_test <- beta_matrix[1:np,]
 beta0_test <- beta_matrix[np+1,]
 
-eta_matrix <- matrix(etas_global, nrow = k+1, ncol = k-1)
-eta_test <- eta_matrix[1:k,]
-eta0_test <- eta_matrox[k+1,]
+eta_matrix <- matrix(etas_global, nrow = k, ncol = k-1)
+eta_test <- eta_matrix[1:(k-1),]
+eta0_test <- eta_matrox[k,]
 
 # Building the model
-model <- t(t(t(t(x %*% beta_test) + beta0_test) %*% eta_test) + eta0_test)
+first.model <- (t(t(clean_test %*% beta_test) + beta0_test))
+# Probability Calculation
+class.prob <- prob.vertex(first.model,t = etas, k = k)
