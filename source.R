@@ -270,27 +270,35 @@ integerise <- function(u){
 
 # Function that takes in a matrix and replace the NA values
 clean <- function(x){
-    nobs <- nrow(x)
-    np <- ncol(x)
-    x.new <- matrix(0,nrow = nobs,ncol = 0)
-    for(i in 1:np){
-        col <- x[,i]
-        if (sum(is.na(col))>0){
-            if(is.factor(col)){
-                temp <- factorise(col)
-                x.new <- cbind(x.new,temp)
-            } else {
-                temp <- integerise(col)
-                x.new <- cbind(x.new,temp$updated,temp$posn)
-            }
-        } else {
-            x.new <- cbind(x.new,col)
-        }
+  nobs <- nrow(x)
+  np <- ncol(x)
+  x_new <- matrix(0,nrow = nobs,ncol = 0)
+  ccount <- 0
+  for(i in 1:np){
+    col <- x[,i]
+    if (sum(is.na(col))>0){
+      if(is.factor(col)){
+        temp <- factorise(col)
+        x_new <- cbind(x_new,temp)
+        colnames(x_new)[i+ccount] <- paste("v",i,sep="")
+        temp <- 0
+      } else {
+        temp <- integerise(col)
+        x_new <- cbind(x_new,temp$updated)
+        colnames(x_new)[i+ccount] <- paste("v",i,sep="")
+        x_new <- cbind(x_new,temp$posn)
+        ccount <- ccount + 1
+        colnames(x_new)[i+ccount] <- paste("c",ccount,sep="")
+        temp <- 0
+      }
+    } else {
+      x_new <- cbind(x_new,col)
+      colnames(x_new)[i+ccount] <- paste("v",i,sep="")
     }
-    colnames(x.new) <- NULL
-    out <- x.new[,2:ncol(x.new)]
-    rownames(out) <- x.new[,1]
-    return(out)
+  }
+  out <- x_new[,2:ncol(x_new)]
+  rownames(out) <- x_new[,1]
+  return(out)
 }
 
 
