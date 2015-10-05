@@ -51,6 +51,23 @@ clean_data <- removeZeroes(clean_data1,nrow(clean_data1),ncol(clean_data1))
 save(clean_data, file = 'clean_data.rdata')
 
 ######################################################
+# Extracting only the columns that exists in both test and data
+######################################################
+
+bignc <- ncol(clean_test) #assuming this matrix has more columns
+smallnc <- ncol(clean_data)
+morenames <- colnames(clean_test)
+lessnames <- colnames(clean_data)
+tmp <- matrix(0,nrow=nrow(clean_test),ncol=0)
+for(i in 1:bignc){
+  if(sum(morenames[i]==lessnames)>0){
+    tmp <- cbind(tmp,clean_test[,i])
+  }
+}
+clean_test <- tmp
+tmp <- 0
+
+######################################################
 # Partition of data
 ######################################################
 
