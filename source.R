@@ -288,7 +288,7 @@ clean <- function(x){
         colnames(x_new)[i+ccount] <- paste("v",i,sep="")
         x_new <- cbind(x_new,temp$posn)
         ccount <- ccount + 1
-        colnames(x_new)[i+ccount] <- paste("c",ccount,sep="")
+        colnames(x_new)[i+ccount] <- paste("c",i,sep="")
         temp <- 0
       }
     } else {
